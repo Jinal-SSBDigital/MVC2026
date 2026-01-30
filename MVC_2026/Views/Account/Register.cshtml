@@ -1,0 +1,759 @@
+﻿@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using MVC2026.Models
+@model CustomerRegister
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="description" content="Responsive Bootstrap 4 and web Application ui kit.">
+
+    <title>:: Alpino :: Sign Up</title>
+    <!-- Favicon-->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="~/login_sign-up/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Custom Css -->
+    <link href="~/login_sign-up/css/main.css" rel="stylesheet" />
+    <link href="~/login_sign-up/css/color_skins.css" rel="stylesheet" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .newauthentication {
+            position: relative;
+            min-height: 100vh;
+            background-image: url('@Url.Content("~/img/Picture1.jpg")');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            /* Dark overlay */
+            .newauthentication::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.55);
+                z-index: 1;
+            }
+
+        /* Ensure content stays above overlay */
+        .container {
+            position: relative;
+            z-index: 2;
+        }
+
+        .content-center {
+            padding: 20px 0;
+        }
+
+        /* Card styling */
+        .card-plain {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px 35px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+            .card-plain .header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+                .card-plain .header h5 {
+                    font-size: 28px;
+                    font-weight: 600;
+                    color: #333;
+                    margin-bottom: 8px;
+                }
+
+                .card-plain .header span {
+                    color: #777;
+                    font-size: 14px;
+                }
+
+        /* Form controls */
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 12px 45px 12px 15px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+            height: 45px;
+        }
+
+            .form-control:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.15);
+                outline: none;
+            }
+
+            .form-control::placeholder {
+                color: #999;
+            }
+
+        textarea.form-control {
+            height: auto;
+            padding: 12px 15px;
+            resize: vertical;
+        }
+
+        .input-group-append {
+            position: absolute;
+            right: 0;
+            top: 0;
+            height: 45px;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-group-text {
+            background: transparent;
+            border: none;
+            padding: 0 15px;
+            color: #666;
+        }
+
+            .input-group-text i {
+                font-size: 18px;
+            }
+
+        /* Password toggle */
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 50px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 10;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+            .password-toggle:hover {
+                color: #333;
+            }
+
+            .password-toggle i {
+                font-size: 18px;
+            }
+
+        /* Validation styles */
+        .field-validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            display: block;
+            margin-top: -15px;
+            margin-bottom: 15px;
+            padding-left: 5px;
+        }
+
+        .input-validation-error {
+            border-color: #dc3545 !important;
+        }
+
+            .input-validation-error:focus {
+                box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+            }
+
+        /* Password strength indicator */
+        .password-strength {
+            height: 4px;
+            margin-top: -15px;
+            margin-bottom: 5px;
+            background: #e9ecef;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .password-strength-bar {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak {
+            background: #dc3545;
+            width: 33%;
+        }
+
+        .strength-medium {
+            background: #ffc107;
+            width: 66%;
+        }
+
+        .strength-strong {
+            background: #28a745;
+            width: 100%;
+        }
+
+        .password-strength-text {
+            font-size: 11px;
+            margin-bottom: 15px;
+            display: block;
+            padding-left: 5px;
+        }
+
+        /* Alert messages */
+        .alert {
+            margin-bottom: 20px;
+            border-radius: 5px;
+            padding: 12px 15px;
+            font-size: 14px;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+
+        .alert .close {
+            padding: 0;
+            background-color: transparent;
+            border: 0;
+            font-size: 20px;
+            font-weight: 700;
+            line-height: 1;
+            color: #000;
+            opacity: 0.5;
+            cursor: pointer;
+        }
+
+        /* Checkbox */
+        .checkbox {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+            .checkbox input[type="checkbox"] {
+                width: 18px;
+                height: 18px;
+                margin-right: 8px;
+                cursor: pointer;
+            }
+
+            .checkbox label {
+                margin: 0;
+                font-size: 14px;
+                color: #555;
+                cursor: pointer;
+            }
+
+                .checkbox label a {
+                    color: #007bff;
+                    text-decoration: none;
+                }
+
+                    .checkbox label a:hover {
+                        text-decoration: underline;
+                    }
+
+        /* Submit button */
+        .btn-primary {
+            background: #007bff;
+            border: none;
+            color: #fff;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+            .btn-primary:hover {
+                background: #0056b3;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+            }
+
+            .btn-primary:active {
+                transform: translateY(0);
+            }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        /* Loading spinner */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+            .btn-loading::after {
+                content: "";
+                position: absolute;
+                width: 16px;
+                height: 16px;
+                top: 50%;
+                left: 50%;
+                margin-left: -8px;
+                margin-top: -8px;
+                border: 2px solid #fff;
+                border-radius: 50%;
+                border-top-color: transparent;
+                animation: spinner 0.6s linear infinite;
+            }
+
+        @@keyframes spinner {
+            to
+
+        {
+            transform: rotate(360deg);
+        }
+
+        }
+
+        /* Location prompt */
+        .location-prompt {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #004085;
+        }
+
+            .location-prompt i {
+                margin-right: 8px;
+            }
+
+            .location-prompt > div {
+                margin-top: 10px;
+            }
+
+            .location-prompt .btn {
+                font-size: 13px;
+                padding: 6px 16px;
+                margin-right: 8px;
+                border-radius: 4px;
+            }
+
+        .btn-sm {
+            font-size: 13px;
+            padding: 6px 16px;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            border: none;
+            color: #fff;
+        }
+
+            .btn-secondary:hover {
+                background: #5a6268;
+            }
+
+        /* Link */
+        .link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #007bff;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+            .link:hover {
+                text-decoration: underline;
+            }
+
+        /* Responsive */
+        @@media (max-width: 768px) {
+            .card-plain
+
+        {
+            padding: 30px 25px;
+            margin: 10px;
+        }
+
+        .card-plain .header h5 {
+            font-size: 24px;
+        }
+
+        }
+
+        /* Hide company details */
+        .company_detail {
+            display: none;
+        }
+    </style>
+</head>
+
+<body class="theme-black">
+    <div class="newauthentication">
+        <div class="container">
+            <div class="col-md-12 content-center">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6 col-md-12 d-none d-lg-flex align-items-center">
+                        <div class="company_detail">
+                            <h4 class="logo"><img src="assets/images/logo.svg" alt=""> Alpino</h4>
+                            <h3>The ultimate <strong>Bootstrap 4</strong> Admin Dashboard</h3>
+                            <p>Alpino is fully based on HTML5 + CSS3 Standards. Is fully responsive and clean on every device and every browser</p>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-8 col-sm-10 d-flex align-items-center justify-content-center">
+                        <div class="card-plain">
+                            <div class="header">
+                                <h5>Sign Up</h5>
+                                <span>Register a new membership</span>
+                            </div>
+
+                            <!-- Display server-side validation summary -->
+                            @if (ViewBag.ErrorMessage != null)
+                            {
+                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                    @ViewBag.ErrorMessage
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+
+                            @if (ViewBag.SuccessMessage != null)
+                            {
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    @ViewBag.SuccessMessage
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                            }
+
+                            <!-- Optional Location Prompt -->
+                            <div class="location-prompt" id="locationPrompt" style="display: none;">
+                                <i class="zmdi zmdi-pin"></i>
+                                <span>Enable location for better service?</span>
+                                <div>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="enableLocation()">Enable</button>
+                                    <button type="button" class="btn btn-sm btn-secondary" onclick="skipLocation()">Skip</button>
+                                </div>
+                            </div>
+
+                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "registerForm" }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <!-- User Name -->
+                                <div class="input-group">
+                                    @Html.TextBoxFor(m => m.Custm_name, new {
+                                    @class = "form-control",
+                                                                placeholder = "Enter User Name",
+                                                                required = "required",
+                                                                minlength = "3",
+                                                                maxlength = "50"
+                                                                })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-account-circle"></i></span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Custm_name, "", new { @class = "field-validation-error" })
+
+                            <!-- Email -->
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.Email, new {
+                                                                @class = "form-control",
+                                                                placeholder = "Enter Email",
+                                                                type = "email",
+                                                                required = "required"
+                                                                })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-email"></i></span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "field-validation-error" })
+
+                            <!-- Password -->
+                            <div class="input-group">
+                                @Html.PasswordFor(m => m.Password, new {
+                                                                @class = "form-control",
+                                                                placeholder = "Enter Password",
+                                                                required = "required",
+                                                                minlength = "6",
+                                                                id = "password"
+                                                                })
+                                <span class="password-toggle" onclick="togglePassword('password')">
+                                    <i class="zmdi zmdi-eye" id="password-icon"></i>
+                                </span>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+                                </div>
+                            </div>
+                            <div class="password-strength">
+                                <div class="password-strength-bar" id="strengthBar"></div>
+                            </div>
+                            <span class="password-strength-text" id="strengthText"></span>
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "field-validation-error" })
+
+                            <!-- Confirm Password -->
+                            <div class="input-group">
+                                <input type="password"
+                                       class="form-control"
+                                       placeholder="Confirm Password"
+                                       id="confirmPassword"
+                                       required
+                                       minlength="6"
+                                       name="ConfirmPassword">
+                                <span class="password-toggle" onclick="togglePassword('confirmPassword')">
+                                    <i class="zmdi zmdi-eye" id="confirmPassword-icon"></i>
+                                </span>
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-lock"></i></span>
+                                </div>
+                            </div>
+                            <span class="field-validation-error" id="confirmPasswordError"></span>
+
+                            <!-- Mobile -->
+                            <div class="input-group">
+                                @Html.TextBoxFor(m => m.Mobile, new {
+                                                                @class = "form-control",
+                                                                placeholder = "Enter Mobile Number",
+                                                                maxlength = "10",
+                                                                pattern = "[0-9]{10}",
+                                                                oninput = "this.value=this.value.replace(/[^0-9]/g,'')",
+                                                                required = "required"
+                                                                })
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="zmdi zmdi-phone"></i></span>
+                                </div>
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Mobile, "", new { @class = "field-validation-error" })
+
+                            <!-- Address -->
+                            <div class="input-group">
+                                @Html.TextAreaFor(m => m.Address, new {
+                                                                @class = "form-control",
+                                                                placeholder = "Enter Address",
+                                                                rows = "3",
+                                                                maxlength = "200"
+                                                                })
+                            </div>
+                            @Html.ValidationMessageFor(m => m.Address, "", new { @class = "field-validation-error" })
+
+                            <!-- Hidden fields for location -->
+                            @Html.HiddenFor(m => m.Latitude, new { id = "latitude" })
+                            @Html.HiddenFor(m => m.Longitude, new { id = "longitude" })
+
+                            <!-- Terms and Conditions -->
+                            <div class="checkbox">
+                                <input id="terms" type="checkbox" required>
+                                <label for="terms">I read and Agree to the <a href="javascript:void(0);">Terms of Usage</a></label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary btn-round btn-block" id="submitBtn">
+                                SIGN UP
+                            </button>
+                                                        }
+
+                            <a class="link" href="/Account/Login">You already have a membership?</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery Core Js -->
+    <script src="~/login_sign-up/bundles/libscripts.bundle.js"></script>
+    <script src="~/login_sign-up/bundles/vendorscripts.bundle.js"></script>
+
+    <script>
+        // Form validation and enhancement
+        $(document).ready(function() {
+            // Show location prompt after 2 seconds
+            setTimeout(function() {
+                $('#locationPrompt').slideDown();
+            }, 2000);
+
+            // Password strength checker
+            $('#password').on('input', function() {
+                checkPasswordStrength($(this).val());
+            });
+
+            // Confirm password validation
+            $('#confirmPassword').on('input', function() {
+                validateConfirmPassword();
+            });
+
+            // Form submission
+            $('#registerForm').on('submit', function(e) {
+                // Validate confirm password
+                if (!validateConfirmPassword()) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                // Show loading state
+                var btn = $('#submitBtn');
+                btn.addClass('btn-loading');
+                btn.prop('disabled', true);
+                btn.text('Please wait...');
+            });
+        });
+
+        // Password strength checker
+        function checkPasswordStrength(password) {
+            var strength = 0;
+            var strengthBar = $('#strengthBar');
+            var strengthText = $('#strengthText');
+
+            if (password.length === 0) {
+                strengthBar.removeClass('strength-weak strength-medium strength-strong');
+                strengthText.text('');
+                return;
+            }
+
+            // Length check
+            if (password.length >= 8) strength++;
+            if (password.length >= 12) strength++;
+
+            // Character variety
+            if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+            if (/\d/.test(password)) strength++;
+            if (/[^a-zA-Z\d]/.test(password)) strength++;
+
+            // Update UI
+            strengthBar.removeClass('strength-weak strength-medium strength-strong');
+
+            if (strength <= 2) {
+                strengthBar.addClass('strength-weak');
+                strengthText.text('Weak password').css('color', '#dc3545');
+            } else if (strength <= 4) {
+                strengthBar.addClass('strength-medium');
+                strengthText.text('Medium password').css('color', '#ffc107');
+            } else {
+                strengthBar.addClass('strength-strong');
+                strengthText.text('Strong password').css('color', '#28a745');
+            }
+        }
+
+        // Validate confirm password
+        function validateConfirmPassword() {
+            var password = $('#password').val();
+            var confirmPassword = $('#confirmPassword').val();
+            var errorSpan = $('#confirmPasswordError');
+
+            if (confirmPassword.length === 0) {
+                errorSpan.text('');
+                return true;
+            }
+
+            if (password !== confirmPassword) {
+                errorSpan.text('Passwords do not match');
+                $('#confirmPassword').addClass('input-validation-error');
+                return false;
+            } else {
+                errorSpan.text('');
+                $('#confirmPassword').removeClass('input-validation-error');
+                return true;
+            }
+        }
+
+        // Toggle password visibility
+        function togglePassword(fieldId) {
+            var field = $('#' + fieldId);
+            var icon = $('#' + fieldId + '-icon');
+
+            if (field.attr('type') === 'password') {
+                field.attr('type', 'text');
+                icon.removeClass('zmdi-eye').addClass('zmdi-eye-off');
+            } else {
+                field.attr('type', 'password');
+                icon.removeClass('zmdi-eye-off').addClass('zmdi-eye');
+            }
+        }
+
+        // Enable location
+        function enableLocation() {
+            if (navigator.geolocation) {
+                $('#locationPrompt').html('<i class="zmdi zmdi-spinner zmdi-hc-spin"></i> Getting your location...');
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        $('#latitude').val(position.coords.latitude);
+                        $('#longitude').val(position.coords.longitude);
+                        $('#locationPrompt').html('<i class="zmdi zmdi-check"></i> Location enabled successfully!').css('color', '#28a745');
+
+                        setTimeout(function() {
+                            $('#locationPrompt').slideUp();
+                        }, 2000);
+                    },
+                    function(error) {
+                        var errorMsg = '';
+                        switch(error.code) {
+                            case error.PERMISSION_DENIED:
+                                errorMsg = "Location access denied. You can enable it later in settings.";
+                                break;
+                            case error.POSITION_UNAVAILABLE:
+                                errorMsg = "Location information unavailable.";
+                                break;
+                            case error.TIMEOUT:
+                                errorMsg = "Location request timed out.";
+                                break;
+                            default:
+                                errorMsg = "An unknown error occurred.";
+                        }
+                        $('#locationPrompt').html('<i class="zmdi zmdi-alert-circle"></i> ' + errorMsg);
+                        setTimeout(function() {
+                            $('#locationPrompt').slideUp();
+                        }, 3000);
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 0
+                    }
+                );
+            } else {
+                $('#locationPrompt').html('<i class="zmdi zmdi-alert-circle"></i> Geolocation is not supported by your browser.');
+                setTimeout(function() {
+                    $('#locationPrompt').slideUp();
+                }, 3000);
+            }
+        }
+
+        // Skip location
+        function skipLocation() {
+            $('#locationPrompt').slideUp();
+        }
+    </script>
+</body>
+
+</html>
