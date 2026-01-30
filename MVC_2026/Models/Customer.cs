@@ -7,18 +7,22 @@ namespace MVC2026.Models
         [Key]
         public int CustmId { get; set; }
 
-        public string Custm_name { get; set; }
+        public string? Custm_name { get; set; }
 
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
-        public string Mobile { get; set; }
+        public string? Mobile { get; set; }
 
-        public string PlainTextPassword { get; set; }
+        public string? PlainTextPassword { get; set; }
 
-        public byte[] PasswordHash { get; set; }
-        public byte[] PasswordSalt { get; set; }
-        public string Address { get; set; }
+        public byte[]? PasswordHash { get; set; }
+        public byte[]? PasswordSalt { get; set; }
+        public string? Address { get; set; }
 
-        public DateTime Createddate { get; set; }
+        public DateTime? Createddate { get; set; }
+
+        public decimal? Latitude { get; set; }
+
+        public decimal? Longitude { get; set; }
     }
 }
