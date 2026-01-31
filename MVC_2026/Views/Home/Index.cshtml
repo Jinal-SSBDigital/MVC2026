@@ -1,0 +1,928 @@
+﻿@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@* Welcome Toast after successful login *@
+@if (TempData["LoginSuccess"] != null && (bool)TempData["LoginSuccess"])
+{
+    <div id="welcomeToast" class="welcome-toast">
+        <div class="toast-content">
+            <i class="fas fa-check-circle"></i>
+            <div class="toast-message">
+                <strong>Login Successful!</strong>
+                <span>@TempData["WelcomeMessage"]</span>
+            </div>
+            <button onclick="closeToast()" class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+}
+
+@* Logout Message *@
+@if (TempData["LogoutMessage"] != null)
+{
+    <div id="logoutToast" class="logout-toast">
+        <div class="toast-content">
+            <i class="fas fa-info-circle"></i>
+            <div class="toast-message">
+                <strong>Logged Out</strong>
+                <span>@TempData["LogoutMessage"]</span>
+            </div>
+            <button onclick="closeLogoutToast()" class="toast-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+}
+
+@section styles {
+    <style>
+        /* Toast Notifications */
+        .welcome-toast,
+        .logout-toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            z-index: 10000;
+            background: linear-gradient(135deg, #d4af37, #c4a03a);
+            color: #1a1a1a;
+            padding: 1.2rem 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.4);
+            animation: slideInRight 0.5s ease;
+            max-width: 400px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+        }
+
+        .logout-toast {
+            background: linear-gradient(135deg, #6c757d, #5a6268);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(108, 117, 125, 0.4);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+            .toast-content i:first-child {
+                font-size: 1.8rem;
+            }
+
+        .toast-message {
+            flex: 1;
+        }
+
+            .toast-message strong {
+                display: block;
+                margin-bottom: 4px;
+                font-size: 1rem;
+            }
+
+            .toast-message span {
+                font-size: 0.9rem;
+                opacity: 0.9;
+            }
+
+        .toast-close {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 5px;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+            .toast-close:hover {
+                opacity: 1;
+            }
+
+        @@keyframes slideInRight {
+            from
+
+        {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        }
+
+        @@keyframes slideOutRight {
+            from
+
+        {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateX(100px);
+        }
+
+        }
+
+        /* ===== HERO SECTION - ANCIENT AESTHETIC ===== */
+        .hero {
+            position: relative;
+            min-height: 92vh;
+            background: linear-gradient(135deg, rgba(61, 41, 20, 0.92), rgba(90, 74, 58, 0.88)), url('@Url.Content("~/img/lv2.jpg")') center/cover fixed;
+            display: flex;
+            align-items: center;
+            color: var(--bg-cream);
+            overflow: hidden;
+        }
+
+            .hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: radial-gradient(circle at 30% 40%, rgba(212, 175, 55, 0.08) 0%, transparent 60%), repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(201, 168, 106, 0.03) 2px, rgba(201, 168, 106, 0.03) 4px);
+                pointer-events: none;
+            }
+
+            .hero::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 850px;
+            animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .hero-ornament {
+            color: var(--gold);
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.9;
+            filter: drop-shadow(0 4px 8px rgba(212, 175, 55, 0.4));
+        }
+
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            line-height: 1.2;
+            color: var(--bg-cream);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-highlight {
+            color: var(--gold);
+            position: relative;
+            display: inline-block;
+            font-style: italic;
+        }
+
+        .hero-subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+            line-height: 1.8;
+            font-style: italic;
+            color: var(--bg-parchment);
+            font-weight: 400;
+        }
+
+        .hero-divider {
+            width: 120px;
+            height: 3px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 2rem 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-top: 3rem;
+        }
+
+        .btn-hero {
+            padding: 1.1rem 2.8rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-family: var(--font-heading);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .btn-hero-primary {
+            background: linear-gradient(135deg, var(--gold), var(--bronze));
+            color: var(--primary-color);
+            border: 2px solid var(--gold);
+            box-shadow: var(--shadow-gold);
+        }
+
+            .btn-hero-primary:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 16px 48px rgba(212, 175, 55, 0.35);
+                background: linear-gradient(135deg, var(--bronze), var(--gold));
+            }
+
+        .btn-hero-secondary {
+            background: rgba(250, 248, 243, 0.12);
+            color: var(--bg-cream);
+            border: 2px solid rgba(250, 248, 243, 0.6);
+            backdrop-filter: blur(10px);
+        }
+
+            .btn-hero-secondary:hover {
+                background: var(--bg-cream);
+                color: var(--primary-color);
+                border-color: var(--bg-cream);
+                transform: translateY(-3px);
+            }
+
+        /* ===== FEATURES SECTION ===== */
+        .features-section {
+            padding: 7rem 0;
+            background: var(--bg-parchment);
+            position: relative;
+        }
+
+            .features-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(201, 168, 106, 0.02) 35px, rgba(201, 168, 106, 0.02) 70px);
+                pointer-events: none;
+            }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-ornament {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 0.6rem 2rem;
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--bronze);
+            border-radius: 2px;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: var(--font-display);
+            border: 2px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            max-width: 650px;
+            margin: 0 auto;
+            font-style: italic;
+            line-height: 1.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 3rem 2.5rem;
+            border-radius: 2px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+        }
+
+            .feature-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 4px;
+                background: linear-gradient(to right, var(--gold), var(--bronze));
+                transform: scaleX(0);
+                transition: var(--transition);
+            }
+
+            .feature-card::after {
+                content: '';
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                width: 80px;
+                height: 80px;
+                background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+                border-radius: 50%;
+                transition: var(--transition);
+            }
+
+            .feature-card:hover {
+                transform: translateY(-12px);
+                box-shadow: var(--shadow-lg);
+                border-color: rgba(212, 175, 55, 0.3);
+            }
+
+                .feature-card:hover::before {
+                    transform: scaleX(1);
+                }
+
+                .feature-card:hover::after {
+                    transform: scale(1.5);
+                    opacity: 0.4;
+                }
+
+        .feature-icon {
+            width: 75px;
+            height: 75px;
+            background: linear-gradient(135deg, var(--gold), var(--bronze));
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 2px;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            z-index: 1;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .feature-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .feature-card p {
+            color: var(--text-medium);
+            line-height: 1.9;
+        }
+
+        /* ===== STATS SECTION ===== */
+        .stats-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2c2416 100%);
+            color: var(--bg-cream);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .stats-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+            .stats-section::after {
+                content: '';
+                position: absolute;
+                top: -50%;
+                right: -10%;
+                width: 600px;
+                height: 600px;
+                background: radial-gradient(circle, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
+                border-radius: 50%;
+            }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stat-card {
+            text-align: center;
+            position: relative;
+        }
+
+            .stat-card::before {
+                content: '❖';
+                position: absolute;
+                top: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: var(--gold);
+                font-size: 1.5rem;
+                opacity: 0.6;
+            }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 0.8rem;
+            font-family: var(--font-display);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+
+        .stat-label {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            font-weight: 500;
+            font-family: var(--font-heading);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* ===== HOW IT WORKS SECTION ===== */
+        .how-it-works {
+            padding: 7rem 0;
+            background: var(--bg-cream);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .step-card {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--gold), var(--bronze));
+            color: var(--primary-color);
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 auto 2rem;
+            box-shadow: var(--shadow-gold);
+            position: relative;
+            font-family: var(--font-display);
+            border: 3px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .step-card:not(:last-child) .step-number::after {
+            content: '◆ ◆ ◆';
+            position: absolute;
+            top: 50%;
+            left: 110%;
+            width: 100px;
+            color: var(--gold);
+            font-size: 0.8rem;
+            opacity: 0.4;
+            letter-spacing: 8px;
+        }
+
+        .step-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1.2rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .step-card p {
+            color: var(--text-medium);
+            line-height: 1.9;
+        }
+
+        /* ===== CTA SECTION ===== */
+        .cta-section {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, rgba(139, 115, 85, 0.95), rgba(90, 74, 58, 0.95)), url('https://images.unsplash.com/photo-1566127444979-b3d2b3ca65b0?q=80&w=2000') center/cover fixed;
+            color: var(--bg-cream);
+            text-align: center;
+            position: relative;
+            border-top: 3px solid var(--gold);
+            border-bottom: 3px solid var(--gold);
+        }
+
+            .cta-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(212, 175, 55, 0.03) 10px, rgba(212, 175, 55, 0.03) 20px);
+                pointer-events: none;
+            }
+
+        .cta-content {
+            max-width: 750px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cta-ornament {
+            color: var(--gold);
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .cta-content h2 {
+            font-family: var(--font-display);
+            font-size: 3.2rem;
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--bg-cream);
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-content p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            opacity: 0.95;
+            font-style: italic;
+            line-height: 1.8;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @@keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @@media (max-width: 768px) {
+            .hero {
+                background-attachment: scroll;
+            }
+
+                .hero h1 {
+                    font-size: 2.8rem;
+                }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+            }
+
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+
+            .cta-content h2 {
+                font-size: 2.2rem;
+            }
+
+            .step-card:not(:last-child) .step-number::after {
+                display: none;
+            }
+
+            .stat-number {
+                font-size: 3rem;
+            }
+
+            .cta-section {
+                background-attachment: scroll;
+            }
+
+            .welcome-toast,
+            .logout-toast {
+                right: 10px;
+                left: 10px;
+                max-width: calc(100% - 20px);
+            }
+        }
+    </style>
+}
+
+@Html.Partial("_LoginModal")
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-ornament">❖</div>
+            <h1>Discover the <span class="hero-highlight">Ancient</span> World</h1>
+            <div class="hero-divider"></div>
+            <p class="hero-subtitle">Journey through time and explore the timeless treasures of humanity's greatest museums. Immerse yourself in history, art, and culture.</p>
+            <div class="hero-buttons">
+                <button class="btn-hero btn-hero-primary" onclick="location.href='@Url.Action("Museums", "Home")'">
+                    <i class="fas fa-compass"></i> Begin Exploration
+                </button>
+                <button class="btn-hero btn-hero-secondary" onclick="location.href='@Url.Action("VirtualTours", "Home")'">
+                    <i class="fas fa-vr-cardboard"></i> Virtual Experience
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-ornament">◆ ◇ ◆</div>
+            <span class="section-tag">Heritage Features</span>
+            <h2>Timeless Experiences</h2>
+            <div class="hero-divider"></div>
+            <p>Explore ancient civilizations and cultural treasures through our meticulously curated platform</p>
+        </div>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-search-location"></i>
+                </div>
+                <h3>Discover</h3>
+                <p>Navigate through centuries of history with our intelligent search. Find museums by region, era, or cultural significance across the globe.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-scroll"></i>
+                </div>
+                <h3>Reserve</h3>
+                <p>Secure your passage to history with our seamless booking system. Plan your cultural pilgrimage with confidence and ease.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-vr-cardboard"></i>
+                </div>
+                <h3>Immerse</h3>
+                <p>Experience sacred halls and ancient galleries through immersive virtual tours. Walk through history from anywhere in the world.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-gem"></i>
+                </div>
+                <h3>Examine</h3>
+                <p>Interact with priceless artefacts in exquisite detail. Discover the stories behind humanity's most treasured relics.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-map-marked-alt"></i>
+                </div>
+                <h3>Navigate</h3>
+                <p>Journey through museum corridors with precision. Our detailed maps guide you to every exhibition and hidden treasure.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h3>Learn</h3>
+                <p>Unlock ancient knowledge through interactive content. Every scan reveals deeper layers of history and meaning.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">500+</div>
+                <div class="stat-label">Historic Museums</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">10K+</div>
+                <div class="stat-label">Ancient Artefacts</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100K+</div>
+                <div class="stat-label">Cultural Explorers</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Virtual Journeys</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="how-it-works">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-ornament">◆ ◇ ◆</div>
+            <span class="section-tag">Your Journey</span>
+            <h2>Path to Discovery</h2>
+            <div class="hero-divider"></div>
+            <p>Four sacred steps to begin your cultural odyssey</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">I</div>
+                <h3>Seek</h3>
+                <p>Browse our curated collection of world-renowned museums. Filter by civilization, period, or cultural heritage.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">II</div>
+                <h3>Envision</h3>
+                <p>Preview exhibitions through immersive virtual experiences. Discover what awaits before your visit.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">III</div>
+                <h3>Secure</h3>
+                <p>Reserve your entry with our trusted booking system. Receive instant confirmation and digital access.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="step-number">IV</div>
+                <h3>Experience</h3>
+                <p>Embark on your journey enhanced with navigation, guided insights, and exclusive digital content.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <div class="cta-ornament">✦</div>
+            <h2>Begin Your Heritage Quest</h2>
+            <div class="hero-divider"></div>
+            <p>Join a community of history enthusiasts discovering the ancient world's greatest treasures</p>
+            <button class="btn-hero btn-hero-secondary" onclick="location.href='@Url.Action("Register", "Account")'">
+                <i class="fas fa-key"></i> Enter the Archives
+            </button>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        // Close welcome toast
+        function closeToast() {
+            const toast = document.getElementById('welcomeToast');
+            if (toast) {
+                toast.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }
+
+        // Close logout toast
+        function closeLogoutToast() {
+            const toast = document.getElementById('logoutToast');
+            if (toast) {
+                toast.style.animation = 'slideOutRight 0.5s ease';
+                setTimeout(() => toast.remove(), 500);
+            }
+        }
+
+        // Auto-hide welcome toast after 5 seconds
+        setTimeout(function() {
+            closeToast();
+        }, 5000);
+
+        // Auto-hide logout toast after 5 seconds
+        setTimeout(function() {
+            closeLogoutToast();
+        }, 5000);
+
+        // Add smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.classList.contains('animated')) {
+                    entry.target.classList.add('animated');
+                    animateValue(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-number').forEach(stat => {
+            observer.observe(stat);
+        });
+
+        function animateValue(element) {
+            const text = element.textContent;
+            const value = parseInt(text.replace(/\D/g, ''));
+            const suffix = text.replace(/[\d,]/g, '');
+            const duration = 2500;
+            const start = 0;
+            const increment = value / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= value) {
+                    element.textContent = value.toLocaleString() + suffix;
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString() + suffix;
+                }
+            }, 16);
+        }
+
+        // Parallax effect for sections
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.hero, .cta-section');
+
+            parallaxElements.forEach(element => {
+                const speed = 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.backgroundPosition = `center ${yPos}px`;
+            });
+        });
+    </script>
+}
