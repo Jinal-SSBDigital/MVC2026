@@ -1,90 +1,144 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Microsoft.AspNet.Identity;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
 using MVC2026.Data;
-using MVC2026.Helper;
 using MVC2026.Models;
+using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
 
-namespace MVC2026.Controllers
+namespace MapLocation.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly AppDbContext context;
+        private readonly AppDbContext _context;
 
-        public AccountController(AppDbContext dbContext)
+        public AccountController(AppDbContext context)
         {
-            context = dbContext;
+            _context = context;
         }
-        public IActionResult Index()
+
+        // GET: Account/Login
+        public ActionResult Login()
         {
+            // If already logged in, redirect to home
+            var userEmail = HttpContext.Session.GetString("UserEmail");
+            if (!string.IsNullOrEmpty(userEmail))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
 
-
-        public IActionResult Login()
-        {
-            return View();
-        }
-
+        // POST: Account/Login
         [HttpPost]
-        public IActionResult Login(CustomerLogin Clogin)
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(CustomerLogin model, bool remember = false)
         {
-            var custm = context.Customers.FirstOrDefault(x => x.Email == Clogin.Email);
+            //if (ModelState.IsValid)
+            //{
+                // Check credentials in database
+                var user = _context.Customers.FirstOrDefault(x => x.Email == model.Email);
 
-            if (custm == null)
-            {
-                ViewBag.Error = "Invalid Login";
-                return View();
-            }
+            if (user != null)
+                {
+                    // Login successful - Set session
+                    HttpContext.Session.SetString("UserEmail", user.Email);
+                    HttpContext.Session.SetString("UserName", user.Email.Split('@')[0]);
+                    HttpContext.Session.SetInt32("UserId", user.CustmId);
 
-            bool isPaawordValid = PasswordHelper.VerifyPasswordHash(Clogin.Password, custm.PasswordHash, custm.PasswordSalt);
+                    // Set session timeout based on remember me
+                    if (remember)
+                    {
+                        HttpContext.Session.SetString("RememberMe", "true");
+                    }
 
-            if (!isPaawordValid)
-            {
-                ViewBag.Error = "Invalid Login";
-                return View();
-            }
-            HttpContext.Session.SetInt32("CustomerId", custm.CustmId);
-            return RedirectToAction("Index", "Home");
+                    // Set TempData to indicate successful login
+                    TempData["LoginSuccess"] = true;
+                    TempData["WelcomeMessage"] = $"Welcome back!";
 
-            //return View();
+                    // Redirect to home page
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    // Login failed
+                    ModelState.AddModelError("", "Invalid email or password");
+                    ViewBag.Error = "Invalid email or password. Please try again.";
+                }
+            //}
+
+            return View(model);
         }
 
-        [HttpGet]
-
-        public IActionResult Register()
+        // GET: Account/Register
+        public ActionResult Register()
         {
+            //// If already logged in, redirect to home
+            //var userEmail = HttpContext.Session.GetString("UserEmail");
+            //if (!string.IsNullOrEmpty(userEmail))
+            //{
+            //    return RedirectToAction("Index", "Home");
+            //}
+            HttpContext.Session.Clear();
+            ModelState.Clear();
+            //HttpContext.Session.Remove("UserEmail");
             return View();
         }
-        [HttpPost]
 
-        public IActionResult Register(CustomerRegister CReg)
+        // POST: Account/Register
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(CustomerLogin model)
         {
-            if (context.Customers.Any(x => x.Email == CReg.Email))
+            if (ModelState.IsValid)
             {
-                ViewBag.Error = "Email Already Exists.";
-                return View();
+                // Check if email already exists
+                var existingUser = _context.CustomerLogins.FirstOrDefault(u => u.Email == model.Email);
+
+                if (existingUser != null)
+                {
+                    ModelState.AddModelError("Email", "This email is already registered. Please login instead.");
+                    ViewBag.Error = "Email already registered";
+                    return View(model);
+                }
+
+                // Add new user
+                _context.CustomerLogins.Add(model);
+                _context.SaveChanges();
+
+                // Auto login after registration
+                HttpContext.Session.SetString("UserEmail", model.Email);
+                HttpContext.Session.SetString("UserName", model.Email.Split('@')[0]);
+                HttpContext.Session.SetInt32("UserId", model.Id);
+
+                TempData["LoginSuccess"] = true;
+                TempData["WelcomeMessage"] = "Account created successfully! Welcome to Museum Explorer!";
+
+                return RedirectToAction("Index", "Home");
             }
 
-            PasswordHelper.CreatePAsswordhash(CReg.Password, out byte[] hash, out byte[] salt);
-            var customer = new Customer
-            {
-                Custm_name = CReg.Custm_name,
-                Email = CReg.Email,
-                PlainTextPassword = CReg.Password,
-                PasswordHash =hash,
-                PasswordSalt =salt,
-                Mobile = CReg.Mobile,
-                Address = CReg.Address
-            };
+            return View(model);
+        }
 
-            context.Customers.Add(customer);
-            context.SaveChanges();
+        // GET: Account/Logout
+        public ActionResult Logout()
+        {
+            // Clear session
+            HttpContext.Session.Clear();
 
-            HttpContext.Session.SetInt32("CustomerId", customer.CustmId);
+            TempData["LogoutMessage"] = "You have been logged out successfully";
+
             return RedirectToAction("Index", "Home");
+        }
 
+        // GET: Account/ForgotPassword
+        public ActionResult ForgotPassword()
+        {
+            return View();
         }
 
         //Google Login 
@@ -109,8 +163,8 @@ namespace MVC2026.Controllers
                 var Email = result.Principal.FindFirstValue(ClaimTypes.Email);
                 var Name = result.Principal.FindFirstValue(ClaimTypes.Name);
 
-                var customer = context.Customer.FirstOrDefault(c => c.Email == Email);
-      
+                var customer = _context.Customer.FirstOrDefault(c => c.Email == Email);
+
                 if (customer == null)
                 {
                     customer = new Customer
@@ -119,11 +173,17 @@ namespace MVC2026.Controllers
                         Email = Email,
                         Createddate = DateTime.Now
                     };
-                    context.Customers.Add(customer);
-                    context.SaveChanges();
+                    _context.Customers.Add(customer);
+                    _context.SaveChanges();
 
                 }
                 HttpContext.Session.SetInt32("CustomerId", customer.CustmId);
+                HttpContext.Session.SetString("UserEmail", customer.Email);
+                HttpContext.Session.SetString("UserName", customer.Email.Split('@')[0]);
+
+                // Set TempData to indicate successful login
+                TempData["LoginSuccess"] = true;
+                TempData["WelcomeMessage"] = $"Welcome back!";
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception ex)
@@ -131,13 +191,7 @@ namespace MVC2026.Controllers
 
                 throw;
             }
-            
-        }
 
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Login");
         }
     }
 }
