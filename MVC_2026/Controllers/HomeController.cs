@@ -1,11 +1,21 @@
-using System.Diagnostics;
 using MapLocation.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using MVC2026.Data;
+using MVC2026.Models;
+using System.Diagnostics;
 
 namespace MapLocation.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly AppDbContext _context;
+
+        public HomeController(AppDbContext context)
+        {
+            _context = context;
+        }
+
         // GET: Home/Index
         public ActionResult Index()
         {
@@ -34,11 +44,13 @@ namespace MapLocation.Controllers
 
             if (string.IsNullOrEmpty(userEmail))
             {
+
                 // User not logged in - redirect to Index with login modal
                 return RedirectToAction("Index", new { showLogin = true });
             }
 
-            return View();
+            var model = new MuseumViewModel { States = _context.States.Select(s => new SelectListItem { Value = s.StateId.ToString(), Text = s.StateName }).ToList() };
+            return View(model);
         }
 
         // Rest of your controller methods remain the same
