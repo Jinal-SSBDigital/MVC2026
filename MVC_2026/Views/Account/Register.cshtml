@@ -5,7 +5,7 @@
 
 @using MVC2026.Models
 @model CustomerRegister
-<!doctype html>
+@* <!doctype html>
 <html class="no-js" lang="en">
 
 <head>
@@ -21,8 +21,15 @@
 
     <!-- Custom Css -->
     <link href="~/login_sign-up/css/main.css" rel="stylesheet" />
-    <link href="~/login_sign-up/css/color_skins.css" rel="stylesheet" />
-    <style>
+    <link href="~/login_sign-up/css/color_skins.css" rel="stylesheet" /> *@
+<!-- Favicon-->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link href="~/login_sign-up/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+<!-- Custom Css -->
+<link href="~/login_sign-up/css/main.css" rel="stylesheet" />
+<link href="~/login_sign-up/css/color_skins.css" rel="stylesheet" />
+<style>
         body {
             margin: 0;
             padding: 0;
@@ -415,10 +422,10 @@
             display: none;
         }
     </style>
-</head>
+@* </head>
 
-<body class="theme-black">
-    <div class="newauthentication">
+<body class="theme-black"> *@
+<div class="theme-black newauthentication">
         <div class="container">
             <div class="col-md-12 content-center">
                 <div class="row justify-content-center">
@@ -467,19 +474,13 @@
                                 </div>
                             </div>
 
-                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "registerForm" }))
+                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { id = "registerForm", autocomplete = "off" }))
                             {
                                 @Html.AntiForgeryToken()
 
                                 <!-- User Name -->
                                 <div class="input-group">
-                                    @Html.TextBoxFor(m => m.Custm_name, new {
-                                    @class = "form-control",
-                                                                placeholder = "Enter User Name",
-                                                                required = "required",
-                                                                minlength = "3",
-                                                                maxlength = "50"
-                                                                })
+                                    @Html.TextBoxFor(m => m.Custm_name, new { @class = "form-control", placeholder = "Enter User Name",required = "required", minlength = "3",maxlength = "50"})
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-account-circle"></i></span>
                                 </div>
@@ -488,12 +489,7 @@
 
                             <!-- Email -->
                             <div class="input-group">
-                                @Html.TextBoxFor(m => m.Email, new {
-                                                                @class = "form-control",
-                                                                placeholder = "Enter Email",
-                                                                type = "email",
-                                                                required = "required"
-                                                                })
+                                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter Email", type = "email", required = "required"})
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-email"></i></span>
                                 </div>
@@ -502,13 +498,7 @@
 
                             <!-- Password -->
                             <div class="input-group">
-                                @Html.PasswordFor(m => m.Password, new {
-                                                                @class = "form-control",
-                                                                placeholder = "Enter Password",
-                                                                required = "required",
-                                                                minlength = "6",
-                                                                id = "password"
-                                                                })
+                                @Html.PasswordFor(m => m.Password, new {  @class = "form-control",  placeholder = "Enter Password", required = "required", minlength = "6", id = "password" })
                                 <span class="password-toggle" onclick="togglePassword('password')">
                                     <i class="zmdi zmdi-eye" id="password-icon"></i>
                                 </span>
@@ -524,13 +514,7 @@
 
                             <!-- Confirm Password -->
                             <div class="input-group">
-                                <input type="password"
-                                       class="form-control"
-                                       placeholder="Confirm Password"
-                                       id="confirmPassword"
-                                       required
-                                       minlength="6"
-                                       name="ConfirmPassword">
+                                <input type="password" class="form-control"  placeholder="Confirm Password" id="confirmPassword" required minlength="6" name="ConfirmPassword">
                                 <span class="password-toggle" onclick="togglePassword('confirmPassword')">
                                     <i class="zmdi zmdi-eye" id="confirmPassword-icon"></i>
                                 </span>
@@ -542,14 +526,7 @@
 
                             <!-- Mobile -->
                             <div class="input-group">
-                                @Html.TextBoxFor(m => m.Mobile, new {
-                                                                @class = "form-control",
-                                                                placeholder = "Enter Mobile Number",
-                                                                maxlength = "10",
-                                                                pattern = "[0-9]{10}",
-                                                                oninput = "this.value=this.value.replace(/[^0-9]/g,'')",
-                                                                required = "required"
-                                                                })
+                                @Html.TextBoxFor(m => m.Mobile, new { @class = "form-control",   placeholder = "Enter Mobile Number", maxlength = "10", pattern = "[0-9]{10}", oninput = "this.value=this.value.replace(/[^0-9]/g,'')", required = "required" })
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="zmdi zmdi-phone"></i></span>
                                 </div>
@@ -558,12 +535,7 @@
 
                             <!-- Address -->
                             <div class="input-group">
-                                @Html.TextAreaFor(m => m.Address, new {
-                                                                @class = "form-control",
-                                                                placeholder = "Enter Address",
-                                                                rows = "3",
-                                                                maxlength = "200"
-                                                                })
+                                @Html.TextAreaFor(m => m.Address, new {@class = "form-control", placeholder = "Enter Address",rows = "3", maxlength = "200"})
                             </div>
                             @Html.ValidationMessageFor(m => m.Address, "", new { @class = "field-validation-error" })
 
@@ -754,6 +726,7 @@
             $('#locationPrompt').slideUp();
         }
     </script>
-</body>
+@* </body>
 
 </html>
+ *@
