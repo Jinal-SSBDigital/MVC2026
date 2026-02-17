@@ -11,11 +11,13 @@ namespace MVC2026.Data
         public DbSet<Customer> Customers { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<States> States { get; set; }
+
+        public DbSet<MuseumCategory> MuseumCategory { get; set; }
         public DbSet<CustomerLogin> CustomerLogins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<States>()
-                .HasKey(s => new { s.StateId });
+            modelBuilder.Entity<States>().HasKey(s => new { s.StateId });
+            modelBuilder.Entity<MuseumCategory>().HasKey(s => new { s.CategoryId });
         }
 
     }
