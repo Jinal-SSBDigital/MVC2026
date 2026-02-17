@@ -1,0 +1,573 @@
+﻿@using MVC2026.Models
+@{
+    ViewBag.Title = "Museums";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@model MuseumViewModel
+@section styles {
+    <style>
+        .page-hero {
+            background: linear-gradient(135deg, rgba(61, 41, 20, 0.94), rgba(90, 74, 58, 0.9)), url('https://images.unsplash.com/photo-1565530916732-c47bd379a77b?q=80&w=2000') center/cover fixed;
+            padding: 8rem 0 5rem;
+            color: var(--bg-cream);
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid var(--gold);
+        }
+
+            .page-hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+            .page-hero h1 {
+                font-family: var(--font-display);
+                font-size: 4rem;
+                color: var(--bg-cream);
+                margin-bottom: 1rem;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            }
+
+            .page-hero p {
+                font-size: 1.3rem;
+                opacity: 0.95;
+                font-style: italic;
+                max-width: 700px;
+                margin: 0 auto;
+            }
+
+        /* Search & Filter Section */
+        .search-section {
+            background: var(--bg-parchment);
+            padding: 3rem 0;
+            border-bottom: 2px solid rgba(201, 168, 106, 0.2);
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr auto;
+            gap: 1.5rem;
+            align-items: end;
+        }
+
+        .search-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+            .search-group label {
+                font-family: var(--font-heading);
+                font-weight: 600;
+                color: var(--text-medium);
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+        .search-input,
+        .search-select {
+            padding: 1rem 1.3rem;
+            border: 2px solid rgba(201, 168, 106, 0.3);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            background: var(--white);
+            color: var(--text-dark);
+            transition: var(--transition);
+        }
+
+            .search-input:focus,
+            .search-select:focus {
+                outline: none;
+                border-color: var(--gold);
+                box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+            }
+
+        .btn-search {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold), var(--bronze));
+            color: var(--primary-color);
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-heading);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-gold);
+        }
+
+            .btn-search:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 32px rgba(212, 175, 55, 0.35);
+            }
+
+        /* Museums Grid */
+        .museums-content {
+            padding: 5rem 0;
+            background: var(--bg-cream);
+        }
+
+        .museums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .museum-card {
+            background: var(--white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+            .museum-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(to right, var(--gold), var(--bronze));
+                transform: scaleX(0);
+                transition: var(--transition);
+                z-index: 1;
+            }
+
+            .museum-card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-lg);
+                border-color: rgba(212, 175, 55, 0.3);
+            }
+
+                .museum-card:hover::before {
+                    transform: scaleX(1);
+                }
+
+        .museum-image {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .museum-card:hover .museum-image {
+            transform: scale(1.05);
+        }
+
+        .museum-info {
+            padding: 2rem;
+        }
+
+        .museum-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--bronze);
+            border-radius: 2px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .museum-info h3 {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            color: var(--primary-color);
+            margin-bottom: 0.8rem;
+            letter-spacing: 1px;
+        }
+
+        .museum-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+            .museum-location i {
+                color: var(--gold);
+            }
+
+        .museum-description {
+            color: var(--text-medium);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .museum-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201, 168, 106, 0.2);
+        }
+
+        .museum-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gold);
+        }
+
+            .museum-rating i {
+                font-size: 0.9rem;
+            }
+
+            .museum-rating span {
+                color: var(--text-medium);
+                font-weight: 600;
+                margin-left: 0.3rem;
+            }
+
+        .btn-details {
+            padding: 0.7rem 1.5rem;
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+            border-radius: 4px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: var(--font-heading);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+            .btn-details:hover {
+                background: var(--gold);
+                color: var(--primary-color);
+                transform: translateX(4px);
+            }
+
+        /* Results Info */
+        .results-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(201, 168, 106, 0.2);
+        }
+
+        .results-count {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: var(--text-medium);
+        }
+
+            .results-count strong {
+                color: var(--gold);
+                font-weight: 700;
+            }
+
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+            .sort-options label {
+                font-family: var(--font-heading);
+                font-weight: 600;
+                color: var(--text-medium);
+                font-size: 0.9rem;
+            }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .search-container
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        .museums-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-hero h1 {
+            font-size: 2.5rem;
+        }
+
+        .results-info {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        }
+    </style>
+}
+
+<!-- Page Hero -->
+<section class="page-hero">
+    <div class="container">
+        <div class="section-ornament">◆ ◇ ◆</div>
+        <h1>Explore Museums</h1>
+        <div class="hero-divider"></div>
+        <p>Discover world-renowned institutions preserving humanity's greatest treasures and cultural heritage</p>
+    </div>
+</section>
+
+<!-- Search & Filter -->
+<section class="search-section">
+    <div class="container">
+        <div class="search-container">
+            <div class="search-group">
+                <label for="searchQuery">Search Museums</label>
+                <input type="text" id="searchQuery" class="search-input" placeholder="Search by name, location, or collection...">
+            </div>
+            <div class="serach-group">
+                @Html.LabelFor(m => m.SelectedStateId, "State", new { @class = "search-label" })
+                @Html.DropDownListFor(m => m.SelectedStateId, Model.States, "All States", new { @class = "search-select", @id = "stateFilter" })
+            </div>
+            <div class="search-group">
+                @Html.LabelFor(m => m.SelectedCategoryId, "Category", new { @class = "search-label" })
+                @Html.DropDownListFor(m => m.SelectedCategoryId, Model.MuseumCategory, "All Category", new { @class = "search-select", @id = "categoryFilter" })
+            </div>
+            <button class="btn-search">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Museums Content -->
+<section class="museums-content">
+    <div class="container">
+        <div class="results-info">
+            <div class="results-count">
+                Showing <strong>24</strong> museums
+            </div>
+            <div class="sort-options">
+                <label>Sort by:</label>
+                <select class="search-select" style="width: auto; padding: 0.6rem 1rem;">
+                    <option>Most Popular</option>
+                    <option>Newest First</option>
+                    <option>Highest Rated</option>
+                    <option>A-Z</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="museums-grid">
+            <!-- Museum Card 1 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1566127444979-b3d2b3ca65b0?q=80&w=800" alt="The Louvre" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">Art & Culture</span>
+                    <h3>The Louvre</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Paris, France</span>
+                    </div>
+                    <p class="museum-description">
+                        Home to thousands of works of art, including the Mona Lisa and Venus de Milo. The world's largest art museum and historic monument in Paris.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 1 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Museum Card 2 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1555424221-e0a2c3975a97?q=80&w=800" alt="British Museum" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">History</span>
+                    <h3>British Museum</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>London, United Kingdom</span>
+                    </div>
+                    <p class="museum-description">
+                        Dedicated to human history, art and culture. Houses over 8 million works from all continents, documenting human culture from its beginnings.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.8</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 2 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Museum Card 3 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1605882174253-b3f84f7c28c3?q=80&w=800" alt="Egyptian Museum" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">Archaeology</span>
+                    <h3>Egyptian Museum</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Cairo, Egypt</span>
+                    </div>
+                    <p class="museum-description">
+                        Houses the world's most extensive collection of pharaonic antiquities. Explore ancient Egyptian treasures spanning over 5,000 years of history.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.7</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 3 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Museum Card 4 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1582555172866-f73bb12a2ab3?q=80&w=800" alt="Metropolitan Museum" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">Art & Culture</span>
+                    <h3>Metropolitan Museum</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>New York, USA</span>
+                    </div>
+                    <p class="museum-description">
+                        The largest art museum in the United States. Its permanent collection contains over 2 million works spanning 5,000 years of world culture.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 4 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Museum Card 5 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1580974852861-c381510b4959?q=80&w=800" alt="Uffizi Gallery" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">Art & Painting</span>
+                    <h3>Uffizi Gallery</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Florence, Italy</span>
+                    </div>
+                    <p class="museum-description">
+                        Home to the most important collection of Renaissance art in the world. Features masterpieces by Botticelli, Leonardo da Vinci, and Michelangelo.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.8</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 5 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Museum Card 6 -->
+            <div class="museum-card">
+                <img src="https://images.unsplash.com/photo-1564399579883-451a5d44ec08?q=80&w=800" alt="Acropolis Museum" class="museum-image">
+                <div class="museum-info">
+                    <span class="museum-badge">Archaeology</span>
+                    <h3>Acropolis Museum</h3>
+                    <div class="museum-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Athens, Greece</span>
+                    </div>
+                    <p class="museum-description">
+                        Houses every artifact found on the rock and surrounding slopes of the Acropolis. A journey through ancient Greek civilization and philosophy.
+                    </p>
+                    <div class="museum-meta">
+                        <div class="museum-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.9</span>
+                        </div>
+                        <button class="btn-details" onclick="location.href='@Url.Action("MuseumDetails", "Home", new { id = 6 })'">
+                            Explore <i class="fas fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        // Filter and search functionality
+        document.querySelector('.btn-search').addEventListener('click', function() {
+            const query = document.getElementById('searchQuery').value;
+            const category = document.getElementById('categoryFilter').value;
+            const region = document.getElementById('regionFilter').value;
+
+            console.log('Searching:', { query, category, region });
+            // Implement actual search/filter logic here
+        });
+
+        // Real-time search
+        document.getElementById('searchQuery').addEventListener('input', function(e) {
+            // Implement debounced search here
+        });
+    </script>
+}
