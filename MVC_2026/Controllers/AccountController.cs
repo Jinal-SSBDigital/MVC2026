@@ -150,7 +150,7 @@ namespace MapLocation.Controllers
             };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
-        // 🔹 GOOGLE CALLBACK (THIS IS WHAT YOU ASKED)
+        //  GOOGLE CALLBACK (THIS IS WHAT YOU ASKED)
         public async Task<IActionResult> GoogleCallback()
         {
             try
