@@ -1,0 +1,16 @@
+﻿@model MapLocation.Models.MuseumLocationViewModel
+
+<h2>@Model.MuseumName Location</h2>
+
+<p><strong>Latitude:</strong> @Model.Latitude</p>
+<p><strong>Longitude:</strong> @Model.Longitude</p>
+
+@if (Model.Latitude != null && Model.Longitude != null)
+{
+    <iframe width="100%" height="450" style="border:0" loading="lazy" allowfullscreen src="https://www.google.com/maps?q=@Model.Latitude,@Model.Longitude&output=embed">
+    </iframe>
+}
+else
+{
+    <p>Location not available</p>
+}
