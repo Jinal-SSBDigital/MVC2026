@@ -1,0 +1,615 @@
+﻿@{
+    ViewBag.Title = "About Us";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <style>
+        /* ===== ABOUT PAGE STYLES ===== */
+        .about-hero {
+            background: linear-gradient(135deg, rgba(61, 41, 20, 0.93), rgba(90, 74, 58, 0.88)), url('https://images.unsplash.com/photo-1513407030348-c983a97b98d8?q=80&w=2000') center/cover fixed;
+            padding: 8rem 0 5rem;
+            color: var(--bg-cream);
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid var(--gold);
+        }
+
+            .about-hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+            .about-hero h1 {
+                font-family: var(--font-display);
+                font-size: 4rem;
+                color: var(--bg-cream);
+                margin-bottom: 1rem;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+            }
+
+        /* Story Section */
+        .story-section {
+            padding: 7rem 0;
+            background: var(--bg-parchment);
+            position: relative;
+        }
+
+            .story-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 100%;
+                background: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(201, 168, 106, 0.02) 35px, rgba(201, 168, 106, 0.02) 70px);
+                pointer-events: none;
+            }
+
+        .story-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .story-image {
+            border-radius: 4px;
+            box-shadow: var(--shadow-lg);
+            border: 3px solid var(--gold);
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .story-text h2 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .story-text p {
+            color: var(--text-medium);
+            line-height: 2;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .story-quote {
+            border-left: 4px solid var(--gold);
+            padding-left: 2rem;
+            margin: 2.5rem 0;
+            font-style: italic;
+            color: var(--text-dark);
+            font-size: 1.2rem;
+            font-family: var(--font-heading);
+        }
+
+        /* Mission & Vision */
+        .mission-section {
+            padding: 6rem 0;
+            background: var(--bg-cream);
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .mission-card {
+            background: var(--white);
+            padding: 3.5rem;
+            border-radius: 4px;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .mission-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(to right, var(--gold), var(--bronze));
+            }
+
+            .mission-card:hover {
+                transform: translateY(-8px);
+                box-shadow: var(--shadow-lg);
+                border-color: rgba(212, 175, 55, 0.3);
+            }
+
+        .mission-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--gold), var(--bronze));
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 2.2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-gold);
+        }
+
+        .mission-card h3 {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .mission-card p {
+            color: var(--text-medium);
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        /* Values Section */
+        .values-section {
+            padding: 7rem 0;
+            background: linear-gradient(135deg, var(--primary-color) 0%, #2c2416 100%);
+            color: var(--bg-cream);
+            position: relative;
+            border-top: 3px solid var(--gold);
+            border-bottom: 3px solid var(--gold);
+        }
+
+            .values-section::before {
+                content: '';
+                position: absolute;
+                top: -3px;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .value-item {
+            text-align: center;
+            position: relative;
+        }
+
+            .value-item::before {
+                content: '❖';
+                position: absolute;
+                top: -30px;
+                left: 50%;
+                transform: translateX(-50%);
+                color: var(--gold);
+                font-size: 1.5rem;
+                opacity: 0.6;
+            }
+
+        .value-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(212, 175, 55, 0.1);
+            border: 3px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            font-size: 2.5rem;
+            color: var(--gold);
+            transition: var(--transition);
+        }
+
+        .value-item:hover .value-icon {
+            background: var(--gold);
+            color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .value-item h4 {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .value-item p {
+            color: rgba(250, 248, 243, 0.85);
+            line-height: 1.8;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 7rem 0;
+            background: var(--bg-parchment);
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .team-card {
+            background: var(--white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+            .team-card:hover {
+                transform: translateY(-10px);
+                box-shadow: var(--shadow-lg);
+                border-color: rgba(212, 175, 55, 0.3);
+            }
+
+        .team-photo-wrapper {
+            position: relative;
+            overflow: hidden;
+            height: 320px;
+            background: linear-gradient(135deg, var(--bg-parchment), var(--bg-sand));
+        }
+
+        .team-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .team-card:hover .team-photo {
+            transform: scale(1.05);
+        }
+
+        .team-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(61, 41, 20, 0.95), transparent);
+            padding: 2rem 1.5rem 1.5rem;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .team-card:hover .team-overlay {
+            transform: translateY(0);
+        }
+
+        .team-social {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+            .team-social a {
+                width: 40px;
+                height: 40px;
+                background: rgba(212, 175, 55, 0.2);
+                border: 2px solid var(--gold);
+                border-radius: 4px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: var(--gold);
+                transition: var(--transition);
+            }
+
+                .team-social a:hover {
+                    background: var(--gold);
+                    color: var(--primary-color);
+                }
+
+        .team-info {
+            padding: 2rem;
+        }
+
+            .team-info h3 {
+                font-family: var(--font-display);
+                font-size: 1.4rem;
+                color: var(--primary-color);
+                margin-bottom: 0.5rem;
+                letter-spacing: 0.5px;
+            }
+
+        .team-role {
+            color: var(--gold);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .team-bio {
+            color: var(--text-medium);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .about-hero h1
+
+        {
+            font-size: 2.5rem;
+        }
+
+        .story-content {
+            grid-template-columns: 1fr;
+        }
+
+        .mission-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .values-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .story-text h2 {
+            font-size: 2rem;
+        }
+
+        }
+
+        @@media (max-width: 640px) {
+            .values-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+    </style>
+}
+
+<!-- Hero Section -->
+<section class="about-hero">
+    <div class="container">
+        <div class="section-ornament">◆ ◇ ◆</div>
+        <h1>About Us</h1>
+        <div class="hero-divider"></div>
+        <p>Bridging the past and present through digital innovation</p>
+    </div>
+</section>
+
+<!-- Story Section -->
+<section class="story-section">
+    <div class="container">
+        <div class="story-content">
+            <div>
+                <img src="https://images.unsplash.com/photo-1564399579883-451a5d44ec08?q=80&w=800" alt="Our Story" class="story-image">
+            </div>
+            <div class="story-text">
+                <span class="section-tag">Our Journey</span>
+                <h2>Preserving Heritage</h2>
+                <div class="hero-divider" style="margin-left: 0;"></div>
+
+                <p>
+                    Museum Explorer was founded in 2018 with a singular vision: to make the world's cultural treasures accessible to everyone, everywhere. We believe that distance and circumstance should never be barriers to experiencing humanity's greatest achievements.
+                </p>
+
+                <p>
+                    Our platform connects millions of culture enthusiasts with over 500 museums worldwide, offering unprecedented access to ancient artefacts, virtual tours, and educational resources. Through cutting-edge technology and passionate curation, we're democratizing cultural heritage.
+                </p>
+
+                <div class="story-quote">
+                    "Every artefact tells a story. Every story shapes our understanding. Every understanding brings us closer to our shared humanity."
+                </div>
+
+                <p>
+                    From the pyramids of Giza to the halls of the Louvre, from Mayan temples to Renaissance galleries, we're creating a digital bridge to the past. Our team of archaeologists, historians, technologists, and designers work tirelessly to bring you authentic, immersive experiences that inspire wonder and learning.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Mission & Vision -->
+<section class="mission-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-ornament">◆ ◇ ◆</div>
+            <span class="section-tag">Our Purpose</span>
+            <h2>Mission & Vision</h2>
+            <div class="hero-divider"></div>
+        </div>
+
+        <div class="mission-grid">
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-bullseye"></i>
+                </div>
+                <h3>Our Mission</h3>
+                <p>
+                    To democratize access to the world's cultural heritage by creating immersive digital experiences that connect people with museums, artefacts, and history. We empower curiosity, foster appreciation, and preserve knowledge for future generations through innovative technology and passionate storytelling.
+                </p>
+            </div>
+
+            <div class="mission-card">
+                <div class="mission-icon">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <h3>Our Vision</h3>
+                <p>
+                    To become the world's premier digital gateway to cultural institutions, where every person, regardless of location or circumstance, can explore, learn, and be inspired by humanity's greatest treasures. We envision a future where museum walls extend infinitely through technology.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Values Section -->
+<section class="values-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-ornament">◆ ◇ ◆</div>
+            <span class="section-tag" style="background: rgba(212, 175, 55, 0.15); border-color: var(--gold);">Core Principles</span>
+            <h2 style="color: var(--bg-cream);">Our Values</h2>
+            <div class="hero-divider"></div>
+        </div>
+
+        <div class="values-grid">
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h4>Authenticity</h4>
+                <p>We present history with scholarly rigor and cultural sensitivity, partnering with museums to ensure accuracy.</p>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h4>Accessibility</h4>
+                <p>Culture belongs to everyone. We break down barriers to make heritage universally accessible.</p>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-lightbulb"></i>
+                </div>
+                <h4>Innovation</h4>
+                <p>We leverage cutting-edge technology to create experiences that honor the past while embracing the future.</p>
+            </div>
+
+            <div class="value-item">
+                <div class="value-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <h4>Passion</h4>
+                <p>Our love for history, art, and culture drives everything we do, from curation to user experience.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Team Section -->
+<section class="team-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-ornament">◆ ◇ ◆</div>
+            <span class="section-tag">Meet the Team</span>
+            <h2>Heritage Keepers</h2>
+            <div class="hero-divider"></div>
+            <p>The passionate individuals preserving history for tomorrow</p>
+        </div>
+
+        <div class="team-grid">
+            <!-- Team Member 1 -->
+            <div class="team-card">
+                <div class="team-photo-wrapper">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=400" alt="Dr. James Harrison" class="team-photo">
+                    <div class="team-overlay">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Dr. James Harrison</h3>
+                    <div class="team-role">Founder & CEO</div>
+                    <p class="team-bio">
+                        Archaeologist and technologist with 20 years experience in digital heritage preservation.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Team Member 2 -->
+            <div class="team-card">
+                <div class="team-photo-wrapper">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=400" alt="Sarah Chen" class="team-photo">
+                    <div class="team-overlay">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Sarah Chen</h3>
+                    <div class="team-role">Chief Curator</div>
+                    <p class="team-bio">
+                        Museum professional specializing in ancient civilizations and cultural artifact authentication.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Team Member 3 -->
+            <div class="team-card">
+                <div class="team-photo-wrapper">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=400" alt="Marcus Rodriguez" class="team-photo">
+                    <div class="team-overlay">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Marcus Rodriguez</h3>
+                    <div class="team-role">Head of Technology</div>
+                    <p class="team-bio">
+                        VR specialist and software architect creating immersive virtual museum experiences.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Team Member 4 -->
+            <div class="team-card">
+                <div class="team-photo-wrapper">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400" alt="Emma Thompson" class="team-photo">
+                    <div class="team-overlay">
+                        <div class="team-social">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-info">
+                    <h3>Emma Thompson</h3>
+                    <div class="team-role">Director of Education</div>
+                    <p class="team-bio">
+                        Historian and educator developing engaging content and learning experiences.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
