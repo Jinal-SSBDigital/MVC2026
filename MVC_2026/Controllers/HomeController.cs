@@ -37,6 +37,7 @@ namespace MapLocation.Controllers
         }
 
         // GET: Home/Museums
+        //public ActionResult Museums()
         public ActionResult Museums()
         {
             // Check if user is logged in
@@ -44,12 +45,14 @@ namespace MapLocation.Controllers
 
             if (string.IsNullOrEmpty(userEmail))
             {
-
-                // User not logged in - redirect to Index with login modal
                 return RedirectToAction("Index", new { showLogin = true });
             }
 
-            var model = new MuseumViewModel { States = _context.States.Select(s => new SelectListItem { Value = s.StateId.ToString(), Text = s.StateName }).ToList() };
+            var model = new MuseumViewModel { 
+                States = _context.States.Select(s => new SelectListItem { Value = s.StateId.ToString(), Text = s.StateName }).ToList(),
+                MuseumCategory = _context.MuseumCategory.Select(s=> new SelectListItem {Value =s.CategoryId.ToString(),Text =s.CategoryName }).ToList()
+            
+            };
             return View(model);
         }
 
