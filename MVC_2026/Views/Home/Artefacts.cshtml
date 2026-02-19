@@ -1,0 +1,729 @@
+﻿@{
+    ViewBag.Title = "Artefacts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section styles {
+    <style>
+        /* ===== ARTEFACTS PAGE STYLES ===== */
+        .artefacts-hero {
+            background: linear-gradient(135deg, rgba(61, 41, 20, 0.93), rgba(90, 74, 58, 0.9)), url('https://images.unsplash.com/photo-1566140967404-b8b3932483f5?q=80&w=2000') center/cover fixed;
+            padding: 8rem 0 5rem;
+            color: var(--bg-cream);
+            text-align: center;
+            position: relative;
+            border-bottom: 3px solid var(--gold);
+        }
+
+            .artefacts-hero::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: repeating-linear-gradient(90deg, var(--gold) 0px, var(--gold) 12px, transparent 12px, transparent 24px);
+            }
+
+            .artefacts-hero h1 {
+                font-family: var(--font-display);
+                font-size: 4rem;
+                color: var(--bg-cream);
+                margin-bottom: 1rem;
+                letter-spacing: 3px;
+                text-transform: uppercase;
+            }
+
+        /* Filter Section */
+        .filter-section {
+            background: var(--bg-parchment);
+            padding: 2.5rem 0;
+            border-bottom: 2px solid rgba(201, 168, 106, 0.2);
+            position: sticky;
+            top: 85px;
+            z-index: 100;
+        }
+
+        .filter-container {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+            .filter-group label {
+                font-family: var(--font-heading);
+                font-weight: 600;
+                color: var(--text-medium);
+                font-size: 0.9rem;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+
+        .filter-select {
+            padding: 0.7rem 1.2rem;
+            border: 2px solid rgba(201, 168, 106, 0.3);
+            border-radius: 4px;
+            font-family: var(--font-body);
+            background: var(--white);
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+            .filter-select:focus {
+                outline: none;
+                border-color: var(--gold);
+            }
+
+        .view-toggle {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+            background: var(--white);
+            padding: 0.3rem;
+            border-radius: 4px;
+            border: 2px solid rgba(201, 168, 106, 0.2);
+        }
+
+        .view-btn {
+            padding: 0.6rem 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-medium);
+            cursor: pointer;
+            transition: var(--transition);
+            border-radius: 4px;
+        }
+
+            .view-btn.active {
+                background: linear-gradient(135deg, var(--gold), var(--bronze));
+                color: var(--primary-color);
+            }
+
+        /* Artefacts Content */
+        .artefacts-content {
+            padding: 5rem 0;
+            background: var(--bg-cream);
+        }
+
+        .artefacts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .artefact-card {
+            background: var(--white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            position: relative;
+            cursor: pointer;
+        }
+
+            .artefact-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: linear-gradient(to right, var(--gold), var(--bronze));
+                transform: scaleX(0);
+                transition: var(--transition);
+                z-index: 1;
+            }
+
+            .artefact-card:hover {
+                transform: translateY(-10px);
+                box-shadow: var(--shadow-lg);
+                border-color: rgba(212, 175, 55, 0.4);
+            }
+
+                .artefact-card:hover::before {
+                    transform: scaleX(1);
+                }
+
+        .artefact-image-wrapper {
+            position: relative;
+            height: 320px;
+            overflow: hidden;
+            background: linear-gradient(135deg, var(--bg-parchment), var(--bg-sand));
+        }
+
+        .artefact-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .artefact-card:hover .artefact-image {
+            transform: scale(1.08);
+        }
+
+        .artefact-era {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            padding: 0.5rem 1.2rem;
+            background: rgba(212, 175, 55, 0.95);
+            color: var(--primary-color);
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--gold);
+        }
+
+        .artefact-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 0.5rem;
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .artefact-card:hover .artefact-actions {
+            opacity: 1;
+        }
+
+        .action-btn {
+            width: 40px;
+            height: 40px;
+            background: rgba(250, 248, 243, 0.95);
+            border: 2px solid var(--gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+
+            .action-btn:hover {
+                background: var(--gold);
+                color: var(--primary-color);
+                transform: scale(1.1);
+            }
+
+        .artefact-info {
+            padding: 2rem;
+        }
+
+            .artefact-info h3 {
+                font-family: var(--font-display);
+                font-size: 1.4rem;
+                color: var(--primary-color);
+                margin-bottom: 0.8rem;
+                letter-spacing: 0.5px;
+            }
+
+        .artefact-origin {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+            .artefact-origin i {
+                color: var(--gold);
+            }
+
+        .artefact-description {
+            color: var(--text-medium);
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .artefact-meta {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201, 168, 106, 0.2);
+        }
+
+        .meta-detail {
+            text-align: center;
+        }
+
+            .meta-detail .label {
+                display: block;
+                font-size: 0.75rem;
+                color: var(--text-light);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                margin-bottom: 0.3rem;
+            }
+
+            .meta-detail .value {
+                display: block;
+                font-family: var(--font-heading);
+                font-size: 0.95rem;
+                font-weight: 600;
+                color: var(--text-dark);
+            }
+
+        /* List View */
+        .artefacts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .artefact-list-item {
+            background: var(--white);
+            border-radius: 4px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 2px solid transparent;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            cursor: pointer;
+        }
+
+            .artefact-list-item:hover {
+                border-color: rgba(212, 175, 55, 0.4);
+                box-shadow: var(--shadow-lg);
+            }
+
+            .artefact-list-item .artefact-image-wrapper {
+                height: 250px;
+            }
+
+        .artefact-list-info {
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .artefact-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1.5rem;
+        }
+
+        .artefact-list-meta {
+            display: flex;
+            gap: 2rem;
+            margin-top: auto;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(201, 168, 106, 0.2);
+        }
+
+        /* Responsive */
+        @@media (max-width: 968px) {
+            .artefacts-hero h1
+
+        {
+            font-size: 2.5rem;
+        }
+
+        .filter-container {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .view-toggle {
+            margin-left: 0;
+        }
+
+        .artefacts-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .artefact-list-item {
+            grid-template-columns: 1fr;
+        }
+
+            .artefact-list-item .artefact-image-wrapper {
+                height: 280px;
+            }
+
+        .artefact-meta {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        }
+    </style>
+}
+
+<!-- Hero Section -->
+<section class="artefacts-hero">
+    <div class="container">
+        <div class="section-ornament">◆ ◇ ◆</div>
+        <h1>Ancient Artefacts</h1>
+        <div class="hero-divider"></div>
+        <p>Discover humanity's most precious treasures preserved through millennia</p>
+    </div>
+</section>
+
+<!-- Filter Section -->
+<section class="filter-section">
+    <div class="container">
+        <div class="filter-container">
+            <div class="filter-group">
+                <label>Era:</label>
+                <select class="filter-select">
+                    <option>All Periods</option>
+                    <option>Ancient Egypt (3100-30 BC)</option>
+                    <option>Classical Greece (800-146 BC)</option>
+                    <option>Roman Empire (27 BC-476 AD)</option>
+                    <option>Medieval (476-1453)</option>
+                    <option>Renaissance (1300-1600)</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Type:</label>
+                <select class="filter-select">
+                    <option>All Types</option>
+                    <option>Sculpture</option>
+                    <option>Pottery & Ceramics</option>
+                    <option>Jewelry & Ornaments</option>
+                    <option>Weapons & Armor</option>
+                    <option>Manuscripts</option>
+                    <option>Religious Objects</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label>Culture:</label>
+                <select class="filter-select">
+                    <option>All Cultures</option>
+                    <option>Egyptian</option>
+                    <option>Greek</option>
+                    <option>Roman</option>
+                    <option>Mesopotamian</option>
+                    <option>Chinese</option>
+                    <option>Mayan</option>
+                </select>
+            </div>
+
+            <div class="view-toggle">
+                <button class="view-btn active" id="gridView">
+                    <i class="fas fa-th"></i>
+                </button>
+                <button class="view-btn" id="listView">
+                    <i class="fas fa-list"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Artefacts Content -->
+<section class="artefacts-content">
+    <div class="container">
+        <div class="results-info">
+            <div class="results-count">
+                Displaying <strong>48</strong> artefacts
+            </div>
+        </div>
+
+        <div class="artefacts-grid" id="artefactsContainer">
+            <!-- Artefact Card 1 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">1323 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1568454537842-d933259bb258?q=80&w=600" alt="Tutankhamun's Mask" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Tutankhamun's Mask</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Valley of the Kings, Egypt</span>
+                    </div>
+                    <p class="artefact-description">
+                        The iconic golden death mask of Pharaoh Tutankhamun, crafted from 11 kg of solid gold and inlaid with precious stones. A masterpiece of ancient Egyptian craftsmanship.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Gold</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">18th Dynasty</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">Cairo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artefact Card 2 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">196 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1590845947670-c009801ffa74?q=80&w=600" alt="Rosetta Stone" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Rosetta Stone</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Rosetta, Egypt</span>
+                    </div>
+                    <p class="artefact-description">
+                        Ancient Egyptian stele inscribed with three versions of a decree. The key to deciphering Egyptian hieroglyphs and understanding ancient civilization.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Granodiorite</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">Ptolemaic</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">British</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artefact Card 3 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">130-100 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?q=80&w=600" alt="Venus de Milo" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Venus de Milo</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Milos, Greece</span>
+                    </div>
+                    <p class="artefact-description">
+                        Ancient Greek sculpture believed to depict Aphrodite. Famous for its missing arms and timeless beauty, exemplifying Hellenistic art.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Marble</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">Hellenistic</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">Louvre</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artefact Card 4 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">447-432 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1555400082-034d370fce3b?q=80&w=600" alt="Parthenon Marbles" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Parthenon Marbles</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Athens, Greece</span>
+                    </div>
+                    <p class="artefact-description">
+                        Classical Greek marble sculptures that once adorned the Parthenon temple. Masterworks depicting mythological scenes and Athenian festivals.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Marble</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">Classical</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">British</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artefact Card 5 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">2560 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1603105593440-73e9c1eb9fc4?q=80&w=600" alt="Khufu Ship" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Khufu Ship</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Giza, Egypt</span>
+                    </div>
+                    <p class="artefact-description">
+                        Ancient Egyptian full-size vessel sealed in a pit at the foot of the Great Pyramid. One of the oldest and best-preserved boats from antiquity.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Cedar Wood</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">Old Kingdom</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">Giza</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Artefact Card 6 -->
+            <div class="artefact-card">
+                <div class="artefact-image-wrapper">
+                    <span class="artefact-era">900 BC</span>
+                    <div class="artefact-actions">
+                        <button class="action-btn" title="3D View">
+                            <i class="fas fa-cube"></i>
+                        </button>
+                        <button class="action-btn" title="Add to Collection">
+                            <i class="fas fa-bookmark"></i>
+                        </button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1569429593-f16a378c5c29?q=80&w=600" alt="Terracotta Army" class="artefact-image">
+                </div>
+                <div class="artefact-info">
+                    <h3>Terracotta Warriors</h3>
+                    <div class="artefact-origin">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Xi'an, China</span>
+                    </div>
+                    <p class="artefact-description">
+                        Collection of terracotta sculptures depicting armies of Qin Shi Huang. Over 8,000 soldiers, horses, and chariots buried with China's first emperor.
+                    </p>
+                    <div class="artefact-meta">
+                        <div class="meta-detail">
+                            <span class="label">Material</span>
+                            <span class="value">Terracotta</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Period</span>
+                            <span class="value">Qin Dynasty</span>
+                        </div>
+                        <div class="meta-detail">
+                            <span class="label">Museum</span>
+                            <span class="value">Xi'an</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section scripts {
+    <script>
+        // View toggle functionality
+        const gridView = document.getElementById('gridView');
+        const listView = document.getElementById('listView');
+        const container = document.getElementById('artefactsContainer');
+
+        gridView.addEventListener('click', function() {
+            gridView.classList.add('active');
+            listView.classList.remove('active');
+            container.className = 'artefacts-grid';
+        });
+
+        listView.addEventListener('click', function() {
+            listView.classList.add('active');
+            gridView.classList.remove('active');
+            container.className = 'artefacts-list';
+
+            // Convert cards to list items
+            const cards = container.querySelectorAll('.artefact-card');
+            cards.forEach(card => {
+                card.classList.add('artefact-list-item');
+            });
+        });
+
+        // Filter functionality
+        const filters = document.querySelectorAll('.filter-select');
+        filters.forEach(filter => {
+            filter.addEventListener('change', function() {
+                console.log('Filter changed:', this.value);
+                // Implement filter logic here
+            });
+        });
+    </script>
+}
