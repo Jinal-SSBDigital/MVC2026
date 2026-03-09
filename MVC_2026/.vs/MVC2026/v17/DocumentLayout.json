@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\models\\museumviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:models\\museumviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -13,14 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\models\\museumviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|solutionrelative:models\\museumviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{DC635A9A-E212-45F9-A0D4-8213D80EB13F}|MVC2026.csproj|c:\\jinal\\git\\mvc2026\\mvc_2026\\views\\home\\museums.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Bookmark",
@@ -62,25 +62,24 @@
               "RelativeToolTip": "Views\\Home\\Museums.cshtml",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAOAAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-02-17T08:45:17.69Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-17T08:45:17.69Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 0,
               "Title": "HomeController.cs",
               "DocumentMoniker": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
               "ToolTip": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Controllers\\HomeController.cs",
               "RelativeToolTip": "Controllers\\HomeController.cs",
-              "ViewState": "AgIAAFgAAAAAAAAAAAAiwC4AAAANAAAAAAAAAA==",
+              "ViewState": "AgIAAEkAAAAAAAAAAAAkwHAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-02-17T06:02:43.358Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 1,
               "Title": "MuseumViewModel.cs",
               "DocumentMoniker": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Models\\MuseumViewModel.cs",
               "RelativeDocumentMoniker": "Models\\MuseumViewModel.cs",
@@ -88,21 +87,19 @@
               "RelativeToolTip": "Models\\MuseumViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T08:43:31.673Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T08:43:31.673Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "AccountController.cs",
               "DocumentMoniker": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Controllers\\AccountController.cs",
               "RelativeDocumentMoniker": "Controllers\\AccountController.cs",
               "ToolTip": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Controllers\\AccountController.cs",
               "RelativeToolTip": "Controllers\\AccountController.cs",
-              "ViewState": "AgIAACEAAAAAAAAAAIAwwDYAAAAVAAAAAAAAAA==",
+              "ViewState": "AgIAAEgAAAAAAAAAAAD4vz8AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T08:48:01.807Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T08:48:01.807Z"
             },
             {
               "$type": "Document",
@@ -118,7 +115,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "States.cs",
               "DocumentMoniker": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Models\\States.cs",
               "RelativeDocumentMoniker": "Models\\States.cs",
@@ -126,12 +123,11 @@
               "RelativeToolTip": "Models\\States.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAACAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-02T08:41:43.214Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-02T08:41:43.214Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "Index.cshtml",
               "DocumentMoniker": "C:\\Jinal\\Git\\MVC2026\\MVC_2026\\Views\\Home\\Index.cshtml",
               "RelativeDocumentMoniker": "Views\\Home\\Index.cshtml",
@@ -139,8 +135,7 @@
               "RelativeToolTip": "Views\\Home\\Index.cshtml",
               "ViewState": "AgIAAKYCAAAAAAAAAAAUwG0DAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-01-30T11:20:26.333Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-01-30T11:20:26.333Z"
             }
           ]
         }
